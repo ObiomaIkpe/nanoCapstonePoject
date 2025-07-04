@@ -41,6 +41,13 @@ postSchema.virtual('comments', {
   foreignField: 'postId', // Assuming your Comment model uses postId
 });
 
+postSchema.pre(/^find/, function (next) {
+  this.populate({ path: 'userId', select: 'userName email' }) // already here
+      .populate({ path: 'comments' }); // ← add this line
+  next();
+});
+
+
 postSchema.pre('save', function(next) {
   if (this.isModified('title')) {
     this.slug = slugify(this.title, { lower: true, strict: true });

@@ -58,7 +58,6 @@ const getAllPosts = async (req, res) => {
 };
 
 
-
 const updatePost = async (req, res) => {
   try {
     const postId = req.params.id;
