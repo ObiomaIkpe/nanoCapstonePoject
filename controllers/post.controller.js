@@ -28,16 +28,35 @@ const createPost = async (req, res) => {
 };
 
 
+
+
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find().sort({ createdAt: -1 }); // already populates user info via pre-hook
+    const page = parseInt(req.query.page) || 1;      
+    const limit = parseInt(req.query.limit) || 10;   
+    const skip = (page - 1) * limit;
 
-    res.status(200).json({ posts });
+    const totalPosts = await Post.countDocuments();
+
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('comments')
+      .exec();
+
+    res.status(200).json({
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+      posts,
+    });
   } catch (error) {
     console.error("Error fetching all posts:", error);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 const updatePost = async (req, res) => {

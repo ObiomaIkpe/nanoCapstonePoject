@@ -7,6 +7,7 @@ const cors = require('cors')
 const authRoutes = require('./routes/auth.routes');
 const postRoutes = require('./routes/post.routes');
 const userRoutes = require('./routes/user.routes');
+const commentRoutes = require('./routes/comment.routes');
 const errorHandler = require('./middlewares/errorHandler')
 
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/comments', commentRoutes)
 
 
 app.use((req, res, next) => {
